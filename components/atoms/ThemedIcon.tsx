@@ -1,7 +1,13 @@
 import React, { ComponentProps } from 'react';
 
 import { Ionicons } from '@expo/vector-icons';
-import { Text, View } from 'react-native';
+import {
+  CursorValue,
+  ImageStyle,
+  StyleSheet,
+  TextStyle,
+  ViewStyle,
+} from 'react-native';
 
 import { useThemeColor } from '@/hooks/useThemeColor';
 
@@ -22,15 +28,19 @@ export default function ThemedIcon({
 }: IThemedIconProps) {
   const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
 
+  const isPressable = onPress ? 'pointer' : 'auto';
+
+  const style = () => ({
+    cursor: isPressable as CursorValue,
+  });
+
   return (
     <Ionicons
       name={name}
       size={size}
       color={color}
       onPress={onPress}
-      style={{
-        cursor: onPress ? 'pointer' : 'auto',
-      }}
+      style={style()}
     />
   );
 }

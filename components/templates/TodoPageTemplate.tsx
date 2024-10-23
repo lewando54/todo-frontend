@@ -42,12 +42,7 @@ export interface ITodoPageTemplateProps {
 export default function TodoPageTemplate() {
   return (
     <ThemedView style={styles.container}>
-      <ThemedText
-        type="title"
-        style={{
-          marginBottom: 20,
-        }}
-      >
+      <ThemedText type="title" style={styles.title}>
         Todo list
       </ThemedText>
       <TodoList
@@ -67,5 +62,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     width: '100%',
+  },
+  title: {
+    marginBottom: 20,
   },
 });

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 import { Href, Link } from 'expo-router';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Animated, {
   interpolate,
   useAnimatedStyle,
@@ -12,6 +12,7 @@ import Animated, {
 import ThemedIcon from '../atoms/ThemedIcon';
 import { ThemedText } from '../atoms/ThemedText';
 import { ThemedView } from '../atoms/ThemedView';
+import { Colors } from '@/constants/Colors';
 import { TodoStatus } from '@/constants/Enums';
 import { TaskStatus } from '@/constants/Types';
 
@@ -85,50 +86,14 @@ export default function TodoTaskItem({
   };
 
   return (
-    <ThemedView
-      lightColor="#ddd"
-      darkColor="#333"
-      style={{
-        padding: 10,
-        margin: 5,
-        borderRadius: 10,
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-      }}
-    >
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'row',
-          alignItems: 'center',
-          width: '100%',
-        }}
-      >
+    <ThemedView lightColor="#ddd" darkColor="#333" style={styles.container}>
+      <View style={styles.titleContainer}>
         <ThemedText type="subtitle" style={animatedColor}>
           {title}
         </ThemedText>
-        <Animated.View
-          style={[
-            {
-              position: 'absolute',
-              height: 2,
-              borderRadius: 5,
-              backgroundColor: '#666',
-            },
-            animatedStyle,
-          ]}
-        />
+        <Animated.View style={[styles.bar, animatedStyle]} />
       </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          gap: 10,
-        }}
-      >
+      <View style={styles.buttonsContainer}>
         <ActionButton />
         <Link href={`/tasks/${id}` as Href<string>}>
           <ThemedIcon name="pencil" size={16} />
@@ -138,3 +103,33 @@ export default function TodoTaskItem({
     </ThemedView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 10,
+    margin: 5,
+    borderRadius: 10,
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  titleContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+  },
+  bar: {
+    position: 'absolute',
+    height: 2,
+    borderRadius: 5,
+    backgroundColor: Colors.misc.gray,
+  },
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: 10,
+  },
+});

@@ -1,9 +1,11 @@
-import { Dimensions } from 'react-native';
 import React from 'react';
+
+import { Dimensions, StyleSheet } from 'react-native';
+import Animated, { LinearTransition } from 'react-native-reanimated';
+
 import TodoTaskItem from '../molecules/TodoTaskItem';
 import { TodoStatus } from '@/constants/Enums';
 import { Task, TaskStatus } from '@/constants/Types';
-import Animated, { LinearTransition } from 'react-native-reanimated';
 
 export interface ITodoListProps {
   tasks: Task[];
@@ -29,13 +31,7 @@ export default function TodoList({
   return (
     <Animated.FlatList
       data={tasksSortedByStatus}
-      style={{
-        width: '100%',
-        maxWidth:
-          Dimensions.get('window').width < 800
-            ? Dimensions.get('window').width
-            : 800,
-      }}
+      style={styles.list}
       itemLayoutAnimation={LinearTransition}
       renderItem={({ item }) => (
         <TodoTaskItem
@@ -50,3 +46,13 @@ export default function TodoList({
     />
   );
 }
+
+const styles = StyleSheet.create({
+  list: {
+    width: '100%',
+    maxWidth:
+      Dimensions.get('window').width < 800
+        ? Dimensions.get('window').width
+        : 800,
+  },
+});

@@ -6,7 +6,9 @@
 const tintColorLight = '#0a7ea4';
 const tintColorDark = '#fff';
 
-export const Colors: { [key: string]: ColorVariants } = {
+export const Colors: { [key in Themes]: ColorVariants } & {
+  misc: { [key: string]: any };
+} = {
   light: {
     text: '#11181C',
     background: '#fff',
@@ -27,7 +29,13 @@ export const Colors: { [key: string]: ColorVariants } = {
     primaryBg: '#1D1D1D',
     secondaryBg: '#2B2B2B',
   },
+  misc: {
+    gray: '#687076',
+    link: '#0a7ea4',
+  },
 };
+
+export type Themes = 'light' | 'dark';
 
 export type ColorVariants = {
   text: string;
