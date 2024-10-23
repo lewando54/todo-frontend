@@ -36,7 +36,7 @@ export default function TodoTaskItem({
 
   const animatedColor = useAnimatedStyle(() => {
     return {
-      opacity: interpolate(animatedWidth.value, [0, 98], [1, 0]),
+      opacity: interpolate(animatedWidth.value, [0, 98], [1, 0.5]),
     };
   });
 
@@ -45,7 +45,7 @@ export default function TodoTaskItem({
             animatedWidth.value = withTiming(98, { duration: 1000 });
         }
         else {
-            animatedWidth.value = withTiming(0, { duration: 500 });
+            animatedWidth.value = withTiming(0, { duration: 1000 });
         }
     }, [status]);
 
@@ -103,11 +103,7 @@ export default function TodoTaskItem({
             }}
         >
             <ThemedText type="subtitle"
-                        style={[
-                        animatedColor,
-                        {
-                            paddingRight: 10,  
-                        }]}
+                        style={animatedColor}
             >{title}</ThemedText>
             <Animated.View
                 style={[
