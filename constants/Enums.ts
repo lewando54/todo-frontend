@@ -3,5 +3,3 @@ export enum TodoStatus {
     ACTIVE = 'ACTIVE',
     COMPLETED  = 'COMPLETED'
 }
-
-export type TaskStatus = keyof typeof TodoStatus;

@@ -1,17 +1,16 @@
 import { View, Text } from 'react-native'
 import React, { useEffect } from 'react'
-import { TaskStatus, TodoStatus } from '@/constants/Enums'
+import { TodoStatus } from '@/constants/Enums'
 import { ThemedText } from '../atoms/ThemedText'
 import { ThemedView } from '../atoms/ThemedView'
 import { Href, Link } from 'expo-router'
 import ThemedIcon from '../atoms/ThemedIcon'
 import Animated, { interpolate, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
-import { useThemeColor } from '@/hooks/useThemeColor'
+import { TaskStatus } from '@/constants/Types'
 
 export interface ITodoTaskItemProps {
     id: number,
     title: string,
-    description: string,
     status: TaskStatus,
     onDelete: (id: number) => void,
     onAction: (action: TaskStatus, id: number) => void,
@@ -20,7 +19,6 @@ export interface ITodoTaskItemProps {
 export default function TodoTaskItem({
     id,
     title,
-    description,
     status,
     onDelete,
     onAction,
@@ -56,7 +54,7 @@ export default function TodoTaskItem({
             <ThemedIcon 
                 name="square-outline"
                 size={16}
-                onPress={() => onAction(TodoStatus.TODO, id)}
+                onPress={() => onAction(TodoStatus.ACTIVE, id)}
             />
             )
         case TodoStatus.TODO:
@@ -64,7 +62,7 @@ export default function TodoTaskItem({
             <ThemedIcon
                 name="play"
                 size={16}
-                onPress={() => onAction(TodoStatus.COMPLETED, id)}
+                onPress={() => onAction(TodoStatus.TODO, id)}
             />
             )
         case TodoStatus.COMPLETED:
@@ -72,7 +70,7 @@ export default function TodoTaskItem({
             <ThemedIcon
                 name="checkbox-outline"
                 size={16}
-                onPress={() => onAction(TodoStatus.ACTIVE, id)}
+                onPress={() => onAction(TodoStatus.COMPLETED, id)}
             />
             )
         default:

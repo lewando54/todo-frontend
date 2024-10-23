@@ -1,9 +1,9 @@
-import { View, Text, FlatList, Dimensions } from 'react-native'
+import { Dimensions } from 'react-native'
 import React from 'react'
-import { ThemedText } from '../atoms/ThemedText'
 import TodoTaskItem from '../molecules/TodoTaskItem'
-import { TaskStatus, TodoStatus } from '@/constants/Enums'
-import { Task } from '@/constants/Types'
+import { TodoStatus } from '@/constants/Enums'
+import { Task, TaskStatus } from '@/constants/Types'
+import Animated, { LinearTransition } from 'react-native-reanimated'
 
 export interface ITodoListProps {
     tasks: Task[]
@@ -27,24 +27,23 @@ export default function TodoList({
   })
 
   return (
-    <FlatList
+    <Animated.FlatList
     data={tasksSortedByStatus}
     style={{
         width: '100%',
-        maxWidth: Dimensions.get('window').width < 1200 ? Dimensions.get('window').width : 800,
+        maxWidth: Dimensions.get('window').width < 800 ? Dimensions.get('window').width : 800,
     }}
+    itemLayoutAnimation={LinearTransition}
     renderItem={({ item }) => (
       <TodoTaskItem
         key={item.id}
         id={item.id}
         title={item.title}
-        description={item.description}
         status={item.status}
         onDelete={(id) => onDelete(id)}
         onAction={(action, id) => onAction(action, id)}
        />
     )}
-  >
-  </FlatList>
+  />
   )
 }

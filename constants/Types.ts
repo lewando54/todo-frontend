@@ -1,4 +1,4 @@
-import { TaskStatus } from "./Enums";
+import { TodoStatus } from "./Enums";
 
 export type Task = {
     id: number,
@@ -7,3 +7,5 @@ export type Task = {
     description: string,
     status: TaskStatus,
 } 
+
+export type TaskStatus = keyof typeof TodoStatus;

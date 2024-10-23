@@ -1,9 +1,10 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, Task } from 'react-native'
 import React from 'react'
 import { ThemedText } from '../atoms/ThemedText'
 import { ThemedView } from '../atoms/ThemedView'
 import TodoList from '../organisms/TodoList'
 import { TodoStatus } from '@/constants/Enums'
+import { TaskStatus } from '@/constants/Types'
 
 const tasks = [
     {
@@ -28,6 +29,12 @@ const tasks = [
         status: TodoStatus.COMPLETED
     },
 ]
+
+export interface ITodoPageTemplateProps {
+    tasks: Task[]
+    onDelete: (id: number) => void
+    onAction: (action: TaskStatus, id: number) => void
+}
 
 export default function TodoPageTemplate() {
   return (
