@@ -1,29 +1,35 @@
-import { View, Text } from 'react-native'
-import React, { useEffect } from 'react'
-import { TodoStatus } from '@/constants/Enums'
-import { ThemedText } from '../atoms/ThemedText'
-import { ThemedView } from '../atoms/ThemedView'
-import { Href, Link } from 'expo-router'
-import ThemedIcon from '../atoms/ThemedIcon'
-import Animated, { interpolate, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
-import { TaskStatus } from '@/constants/Types'
+import React, { useEffect } from 'react';
+
+import { Href, Link } from 'expo-router';
+import { View } from 'react-native';
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
+
+import ThemedIcon from '../atoms/ThemedIcon';
+import { ThemedText } from '../atoms/ThemedText';
+import { ThemedView } from '../atoms/ThemedView';
+import { TodoStatus } from '@/constants/Enums';
+import { TaskStatus } from '@/constants/Types';
 
 export interface ITodoTaskItemProps {
-    id: number,
-    title: string,
-    status: TaskStatus,
-    onDelete: (id: number) => void,
-    onAction: (action: TaskStatus, id: number) => void,
+  id: number;
+  title: string;
+  status: TaskStatus;
+  onDelete: (id: number) => void;
+  onAction: (action: TaskStatus, id: number) => void;
 }
 
 export default function TodoTaskItem({
-    id,
-    title,
-    status,
-    onDelete,
-    onAction,
+  id,
+  title,
+  status,
+  onDelete,
+  onAction,
 }: ITodoTaskItemProps) {
-
   const animatedWidth = useSharedValue(0);
 
   const animatedStyle = useAnimatedStyle(() => {
@@ -38,104 +44,97 @@ export default function TodoTaskItem({
     };
   });
 
-    useEffect(() => {
-        if(status === TodoStatus.COMPLETED) {
-            animatedWidth.value = withTiming(98, { duration: 1000 });
-        }
-        else {
-            animatedWidth.value = withTiming(0, { duration: 1000 });
-        }
-    }, [status]);
+  useEffect(() => {
+    if (status === TodoStatus.COMPLETED) {
+      animatedWidth.value = withTiming(98, { duration: 1000 });
+    } else {
+      animatedWidth.value = withTiming(0, { duration: 1000 });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status]);
 
   const ActionButton = () => {
     switch (status) {
-        case TodoStatus.ACTIVE:
-            return (
-            <ThemedIcon 
-                name="square-outline"
-                size={16}
-                onPress={() => onAction(TodoStatus.ACTIVE, id)}
-            />
-            )
-        case TodoStatus.TODO:
-            return (
-            <ThemedIcon
-                name="play"
-                size={16}
-                onPress={() => onAction(TodoStatus.TODO, id)}
-            />
-            )
-        case TodoStatus.COMPLETED:
-            return (
-            <ThemedIcon
-                name="checkbox-outline"
-                size={16}
-                onPress={() => onAction(TodoStatus.COMPLETED, id)}
-            />
-            )
-        default:
-            return null
-        }
-  }
+      case TodoStatus.ACTIVE:
+        return (
+          <ThemedIcon
+            name="square-outline"
+            size={16}
+            onPress={() => onAction(TodoStatus.ACTIVE, id)}
+          />
+        );
+      case TodoStatus.TODO:
+        return (
+          <ThemedIcon
+            name="play"
+            size={16}
+            onPress={() => onAction(TodoStatus.TODO, id)}
+          />
+        );
+      case TodoStatus.COMPLETED:
+        return (
+          <ThemedIcon
+            name="checkbox-outline"
+            size={16}
+            onPress={() => onAction(TodoStatus.COMPLETED, id)}
+          />
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
     <ThemedView
-        lightColor='#ddd'
-        darkColor='#333'
-        style={{
-            padding: 10,
-            margin: 5,
-            borderRadius: 10,
-            flex: 1,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-        }}
+      lightColor="#ddd"
+      darkColor="#333"
+      style={{
+        padding: 10,
+        margin: 5,
+        borderRadius: 10,
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      }}
     >
-        <View
-            style={{
-                flex: 1,
-                flexDirection: 'row',
-                alignItems: 'center',
-                width: '100%',
-            }}
-        >
-            <ThemedText type="subtitle"
-                        style={animatedColor}
-            >{title}</ThemedText>
-            <Animated.View
-                style={[
-                    {
-                        position: 'absolute',
-                        height: 2,
-                        borderRadius: 5,
-                        backgroundColor: '#666',
-                    },
-                    animatedStyle
-                ]}
-            />
-        </View>
-        <View style={
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'row',
+          alignItems: 'center',
+          width: '100%',
+        }}
+      >
+        <ThemedText type="subtitle" style={animatedColor}>
+          {title}
+        </ThemedText>
+        <Animated.View
+          style={[
             {
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                gap: 10
-            }
-        }>
-            <ActionButton />
-            <Link href={`/tasks/${id}` as Href<string>}>
-                <ThemedIcon 
-                    name="pencil"
-                    size={16}
-                />
-            </Link>
-            <ThemedIcon 
-                name="close"
-                size={16}
-                onPress={() => onDelete(id)}
-            />
-        </View>
+              position: 'absolute',
+              height: 2,
+              borderRadius: 5,
+              backgroundColor: '#666',
+            },
+            animatedStyle,
+          ]}
+        />
+      </View>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          gap: 10,
+        }}
+      >
+        <ActionButton />
+        <Link href={`/tasks/${id}` as Href<string>}>
+          <ThemedIcon name="pencil" size={16} />
+        </Link>
+        <ThemedIcon name="close" size={16} onPress={() => onDelete(id)} />
+      </View>
     </ThemedView>
-  )
+  );
 }

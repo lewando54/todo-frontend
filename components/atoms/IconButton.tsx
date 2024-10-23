@@ -1,16 +1,26 @@
-import { View, Text, StyleProp, StyleSheet, ViewStyle, Pressable, TouchableOpacity } from 'react-native'
-import React, { ComponentProps } from 'react'
-import Ionicons from '@expo/vector-icons/Ionicons'
-import { useThemeColor } from '@/hooks/useThemeColor'
-import { ColorVariants } from '@/constants/Colors'
+import React, { ComponentProps } from 'react';
+
+import Ionicons from '@expo/vector-icons/Ionicons';
+import {
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native';
+
+import { ColorVariants } from '@/constants/Colors';
+import { useThemeColor } from '@/hooks/useThemeColor';
 
 export interface IIconButtonProps {
-    icon: ComponentProps<typeof Ionicons>['name'],
-    color?: string,
-    size: number,
-    onPress: () => void,
-    variant: 'default' | 'primary' | 'secondary',
-    style?: StyleProp<View>
+  icon: ComponentProps<typeof Ionicons>['name'];
+  color?: string;
+  size: number;
+  onPress: () => void;
+  variant: 'default' | 'primary' | 'secondary';
+  style?: StyleProp<View>;
 }
 
 export default function IconButton({
@@ -18,29 +28,30 @@ export default function IconButton({
   color,
   size,
   onPress,
-  variant='default',
+  variant = 'default',
   style,
 }: IIconButtonProps) {
-  const variantBGSelected = variant === 'default' ? 'primaryBg' : `${variant}Bg` as keyof ColorVariants
-  const variantBg = useThemeColor({}, variantBGSelected)
+  const variantBGSelected =
+    variant === 'default'
+      ? 'primaryBg'
+      : (`${variant}Bg` as keyof ColorVariants);
+  const variantBg = useThemeColor({}, variantBGSelected);
 
   return (
-    <TouchableOpacity 
+    <TouchableOpacity
       onPress={onPress}
-      style={
-        [
-          styles.container,
-          {
-            backgroundColor: variantBg,
-            width: size + 20,
-            height: size + 20,
-          }
-        ]
-      }
+      style={[
+        styles.container,
+        {
+          backgroundColor: variantBg,
+          width: size + 20,
+          height: size + 20,
+        },
+      ]}
     >
       <Ionicons name={icon} size={size} color={color || variantBg} />
     </TouchableOpacity>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -50,4 +61,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-})
+});

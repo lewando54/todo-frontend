@@ -6,7 +6,7 @@
 const tintColorLight = '#0a7ea4';
 const tintColorDark = '#fff';
 
-export const Colors: {[key: string]: ColorVariants} = {
+export const Colors: { [key: string]: ColorVariants } = {
   light: {
     text: '#11181C',
     background: '#fff',
@@ -30,12 +30,12 @@ export const Colors: {[key: string]: ColorVariants} = {
 };
 
 export type ColorVariants = {
-    text: string,
-    background: string,
-    tint: string,
-    icon: string,
-    tabIconDefault: string,
-    tabIconSelected: string,
-    primaryBg: string,
-    secondaryBg: string,
-}
+  text: string;
+  background: string;
+  tint: string;
+  icon: string;
+  tabIconDefault: string;
+  tabIconSelected: string;
+  primaryBg: string;
+  secondaryBg: string;
+};
