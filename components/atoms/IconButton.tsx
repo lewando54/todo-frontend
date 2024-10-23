@@ -1,15 +1,7 @@
 import React, { ComponentProps } from 'react';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
-import {
-  Pressable,
-  StyleProp,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from 'react-native';
+import { StyleProp, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 import { ColorVariants } from '@/constants/Colors';
 import { useThemeColor } from '@/hooks/useThemeColor';

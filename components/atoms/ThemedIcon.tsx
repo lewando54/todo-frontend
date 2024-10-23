@@ -1,13 +1,7 @@
 import React, { ComponentProps } from 'react';
 
 import { Ionicons } from '@expo/vector-icons';
-import {
-  CursorValue,
-  ImageStyle,
-  StyleSheet,
-  TextStyle,
-  ViewStyle,
-} from 'react-native';
+import { CursorValue } from 'react-native';
 
 import { useThemeColor } from '@/hooks/useThemeColor';
 

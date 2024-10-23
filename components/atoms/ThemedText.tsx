@@ -1,4 +1,4 @@
-import { StyleSheet, Text, type TextProps } from 'react-native';
+import { StyleSheet, type TextProps } from 'react-native';
 import Animated from 'react-native-reanimated';
 
 import { Colors } from '@/constants/Colors';
