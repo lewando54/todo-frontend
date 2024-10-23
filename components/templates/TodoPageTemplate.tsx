@@ -35,7 +35,7 @@ export default function TodoPageTemplate() {
         <ThemedText type="title" style={{
             marginBottom: 20,
         }}>Todo list</ThemedText>
-        <TodoList tasks={tasks}/>
+        <TodoList tasks={tasks} onDelete={(id) => console.log('delete task: ', id)} onAction={(action, id) => console.log('action: ', action, ' id: ', id)} />
     </ThemedView>
   )
 }

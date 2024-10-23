@@ -2,15 +2,19 @@ import { View, Text, FlatList, Dimensions } from 'react-native'
 import React from 'react'
 import { ThemedText } from '../atoms/ThemedText'
 import TodoTaskItem from '../molecules/TodoTaskItem'
-import { TodoStatus } from '@/constants/Enums'
+import { TaskStatus, TodoStatus } from '@/constants/Enums'
 import { Task } from '@/constants/Types'
 
 export interface ITodoListProps {
     tasks: Task[]
+    onDelete: (id: number) => void
+    onAction: (action: TaskStatus, id: number) => void
 }
 
 export default function TodoList({
     tasks,
+    onDelete,
+    onAction,
 }: ITodoListProps) {
   const tasksSortedByStatus = tasks.sort((a, b) => {
     if (a.status === TodoStatus.TODO && b.status !== TodoStatus.TODO) {
@@ -36,6 +40,8 @@ export default function TodoList({
         title={item.title}
         description={item.description}
         status={item.status}
+        onDelete={(id) => onDelete(id)}
+        onAction={(action, id) => onAction(action, id)}
        />
     )}
   >
