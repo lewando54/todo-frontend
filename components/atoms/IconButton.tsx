@@ -1,4 +1,4 @@
-import { View, Text, StyleProp } from 'react-native'
+import { View, Text, StyleProp, StyleSheet, ViewStyle, Pressable, TouchableOpacity } from 'react-native'
 import React, { ComponentProps } from 'react'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useThemeColor } from '@/hooks/useThemeColor'
@@ -18,27 +18,36 @@ export default function IconButton({
   color,
   size,
   onPress,
-  variant,
+  variant='default',
   style,
 }: IIconButtonProps) {
-  const variantSelected = variant === 'default' ? 'text' : variant+'Bg' as keyof ColorVariants
-  const variantColor = useThemeColor({}, variantSelected)
+  const variantBGSelected = variant === 'default' ? 'primaryBg' : `${variant}Bg` as keyof ColorVariants
+  const variantBg = useThemeColor({}, variantBGSelected)
 
   return (
-    <View style={
-      [
-        {
-          backgroundColor: variantColor,
-          borderRadius: 50,
-          padding: 10,
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: size + 20,
-          height: size + 20,
-        }
-      ]
-    }>
-      <Ionicons name={icon} size={size} color={color || variantColor} onPress={onPress} />
-    </View>
+    <TouchableOpacity 
+      onPress={onPress}
+      style={
+        [
+          styles.container,
+          {
+            backgroundColor: variantBg,
+            width: size + 20,
+            height: size + 20,
+          }
+        ]
+      }
+    >
+      <Ionicons name={icon} size={size} color={color || variantBg} />
+    </TouchableOpacity>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    borderRadius: 5000,
+    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+})
