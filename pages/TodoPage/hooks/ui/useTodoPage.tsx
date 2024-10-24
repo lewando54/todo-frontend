@@ -1,5 +1,8 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import { useCallback, useEffect, useState } from 'react';
 
+import { Audio } from 'expo-av';
+import { Sound } from 'expo-av/build/Audio';
 import { router } from 'expo-router';
 import { Toast } from 'toastify-react-native';
 
@@ -20,6 +23,24 @@ export const useTodoPage = () => {
     delete: isDeletePending,
     update: isUpdatePending,
   };
+
+  const [sound, setSound] = useState<Sound>();
+
+  async function playDingSound() {
+    const { sound } = await Audio.Sound.createAsync(
+      require('@/assets/audio/ding.mp3'),
+    );
+    setSound(sound);
+    await sound.playAsync();
+  }
+
+  useEffect(() => {
+    return sound
+      ? () => {
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
 
   useEffect(() => {
     if (!tasksData) return;
@@ -79,6 +100,10 @@ export const useTodoPage = () => {
     (id: number, action: TaskStatus) => {
       const newStatus = statusFromAction(action);
 
+      if (newStatus === TodoStatus.COMPLETED) {
+        playDingSound();
+      }
+
       updateTask(
         {
           id,
@@ -109,7 +134,6 @@ export const useTodoPage = () => {
     [updateTask, statusFromAction],
   );
 
-  // Pozostałe funkcje pozostają bez zmian
   const onRefresh = useCallback(() => {
     refetch();
   }, [refetch]);

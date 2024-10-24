@@ -43,7 +43,8 @@
     "react-native-select-dropdown": "^4.0.1",
     "react-native-web": "~0.19.10",
     "toastify-react-native": "^5.0.2",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "expo-av": "~14.0.7"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
