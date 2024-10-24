@@ -1,7 +1,11 @@
 import React, { useEffect } from 'react';
 
-import { Href, Link } from 'expo-router';
-import { StyleSheet, View } from 'react-native';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Animated, {
   interpolate,
   useAnimatedStyle,
@@ -15,39 +19,48 @@ import { ThemedView } from '../atoms/ThemedView';
 import { Colors } from '@/constants/Colors';
 import { TodoStatus } from '@/constants/Enums';
 import { TaskStatus } from '@/constants/Types';
+import { useThemeColor } from '@/hooks/useThemeColor';
 
 export interface ITodoTaskItemProps {
   id: number;
   title: string;
   status: TaskStatus;
+  onDetails: (id: number) => void;
+  onEdit: (id: number) => void;
   onDelete: (id: number) => void;
   onAction: (id: number, action: TaskStatus) => void;
+  isPending?: boolean;
 }
 
 export default function TodoTaskItem({
   id,
   title,
   status,
+  onDetails,
+  onEdit,
   onDelete,
   onAction,
+  isPending,
 }: ITodoTaskItemProps) {
+  const indicatorColor = useThemeColor({}, 'text');
+  const boxColor = useThemeColor({}, 'boxBg');
   const animatedWidth = useSharedValue(0);
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
-      width: `${animatedWidth.value}%`,
+      width: `${interpolate(animatedWidth.value, [0, 1], [0, 100])}%`,
     };
   });
 
   const animatedColor = useAnimatedStyle(() => {
     return {
-      opacity: interpolate(animatedWidth.value, [0, 98], [1, 0.5]),
+      opacity: interpolate(animatedWidth.value, [0, 1], [1, 0.4]),
     };
   });
 
   useEffect(() => {
     if (status === TodoStatus.COMPLETED) {
-      animatedWidth.value = withTiming(98, { duration: 1000 });
+      animatedWidth.value = withTiming(1, { duration: 1000 });
     } else {
       animatedWidth.value = withTiming(0, { duration: 1000 });
     }
@@ -86,19 +99,30 @@ export default function TodoTaskItem({
   };
 
   return (
-    <ThemedView lightColor="#ddd" darkColor="#333" style={styles.container}>
-      <View style={styles.titleContainer}>
+    <ThemedView
+      lightColor={boxColor}
+      darkColor={boxColor}
+      style={styles.container}
+    >
+      <TouchableOpacity
+        style={styles.titleContainer}
+        onPress={() => onDetails(id)}
+      >
         <ThemedText type="subtitle" style={animatedColor}>
           {title}
         </ThemedText>
         <Animated.View style={[styles.bar, animatedStyle]} />
-      </View>
+      </TouchableOpacity>
       <View style={styles.buttonsContainer}>
         <ActionButton />
-        <Link href={`/tasks/${id}` as Href<string>}>
+        <TouchableOpacity onPress={() => onEdit(id)}>
           <ThemedIcon name="pencil" size={16} />
-        </Link>
-        <ThemedIcon name="close" size={16} onPress={() => onDelete(id)} />
+        </TouchableOpacity>
+        {isPending ? (
+          <ActivityIndicator size="small" color={indicatorColor} />
+        ) : (
+          <ThemedIcon name="close" size={16} onPress={() => onDelete(id)} />
+        )}
       </View>
     </ThemedView>
   );
@@ -109,12 +133,13 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 5,
     borderRadius: 10,
-    flex: 1,
+    height: 50,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
   titleContainer: {
+    position: 'relative',
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
@@ -123,6 +148,7 @@ const styles = StyleSheet.create({
   bar: {
     position: 'absolute',
     height: 2,
+    width: '0%',
     borderRadius: 5,
     backgroundColor: Colors.misc.gray,
   },

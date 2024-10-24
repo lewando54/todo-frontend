@@ -4,15 +4,28 @@ import { useTodoPage } from './hooks/ui/useTodoPage';
 import TodoPageTemplate from '@/components/templates/TodoPageTemplate';
 
 export default function TodoPage() {
-  const { tasks, isLoading, isPending, onDelete, onAction } = useTodoPage();
-
+  const {
+    tasks,
+    isLoading,
+    onAdd,
+    onDetails,
+    onEdit,
+    onDelete,
+    onAction,
+    onRefresh,
+  } = useTodoPage();
+  console.log('tasks', tasks);
   return (
     <TodoPageTemplate
       tasks={tasks}
       isLoading={isLoading}
-      isPending={isPending}
+      onAdd={onAdd}
+      onDetails={onDetails}
+      onEdit={onEdit}
       onDelete={onDelete}
       onAction={onAction}
+      onRefresh={onRefresh}
+      isRefreshing={isLoading}
     />
   );
 }

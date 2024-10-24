@@ -4,7 +4,7 @@
  */
 
 const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+const tintColorDark = '#0a7ea4';
 
 export const Colors: { [key in Themes]: ColorVariants } & {
   misc: { [key: string]: string };
@@ -16,8 +16,13 @@ export const Colors: { [key in Themes]: ColorVariants } & {
     icon: '#687076',
     tabIconDefault: '#687076',
     tabIconSelected: tintColorLight,
-    primaryBg: '#f2f2f2',
-    secondaryBg: '#fff',
+    boxBg: '#ddd',
+    primaryBg: '#aaa',
+    secondaryBg: '#BABABA',
+    dangerBg: '#E14A3E',
+    successBg: '#00AE40',
+    warningBg: '#FFD60A',
+    itemBg: '#f2f2f2',
   },
   dark: {
     text: '#ECEDEE',
@@ -26,12 +31,23 @@ export const Colors: { [key in Themes]: ColorVariants } & {
     icon: '#9BA1A6',
     tabIconDefault: '#9BA1A6',
     tabIconSelected: tintColorDark,
-    primaryBg: '#1D1D1D',
-    secondaryBg: '#2B2B2B',
+    boxBg: '#333',
+    primaryBg: '#777777',
+    secondaryBg: '#404040',
+    dangerBg: '#D13A2E',
+    successBg: '#00AE40',
+    warningBg: '#FFD60A',
+    itemBg: '#2B2B2B',
   },
   misc: {
-    gray: '#687076',
+    gray: '#777',
     link: '#0a7ea4',
+    todoPill: '#D13A2E',
+    todoPillText: '#DF766D',
+    activePill: '#00A6E0',
+    activePillText: '#40CDFF',
+    completedPill: '#00AE40',
+    completedPillText: '#00CC4B',
   },
 };
 
@@ -44,6 +60,11 @@ export type ColorVariants = {
   icon: string;
   tabIconDefault: string;
   tabIconSelected: string;
+  boxBg: string;
   primaryBg: string;
   secondaryBg: string;
+  dangerBg: string;
+  successBg: string;
+  warningBg: string;
+  itemBg: string;
 };

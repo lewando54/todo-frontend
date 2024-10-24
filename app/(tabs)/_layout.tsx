@@ -13,6 +13,27 @@ export default function TabLayout() {
           title: 'Home',
         }}
       />
+      <Stack.Screen
+        name="task/[id]/index"
+        options={{
+          title: 'Task',
+          headerShown: true,
+        }}
+      />
+      <Stack.Screen
+        name="task/create"
+        options={{
+          title: 'Add task',
+          headerShown: true,
+        }}
+      />
+      <Stack.Screen
+        name="task/[id]/edit"
+        options={{
+          title: 'Edit task',
+          headerShown: true,
+        }}
+      />
     </Stack>
   );
 }

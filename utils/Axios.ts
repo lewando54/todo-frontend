@@ -8,22 +8,14 @@ const Axios = axios.create({
   },
 });
 
-Axios.interceptors.request.use(
-  (config) => {
-    return config;
-  },
-  (error) => {
-    Toast.error(error.message);
-    return Promise.reject(error);
-  },
-);
-
 Axios.interceptors.response.use(
   (response) => {
     return response.data;
   },
   (error) => {
-    Toast.error(error.message);
+    if (error.message.includes('custom:')) {
+      Toast.error(error.message);
+    }
     return Promise.reject(error);
   },
 );

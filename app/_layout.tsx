@@ -7,11 +7,7 @@ import {
   DefaultTheme,
   ThemeProvider,
 } from '@react-navigation/native';
-import {
-  onlineManager,
-  QueryClient,
-  QueryClientProvider,
-} from '@tanstack/react-query';
+import { onlineManager, QueryClientProvider } from '@tanstack/react-query';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -19,6 +15,7 @@ import 'react-native-reanimated';
 import ToastManager from 'toastify-react-native';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { queryClient } from '@/utils/queryClient';
 
 onlineManager.setEventListener((setOnline) => {
   return NetInfo.addEventListener((state) => {
@@ -28,8 +25,6 @@ onlineManager.setEventListener((setOnline) => {
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
-
-const queryClient = new QueryClient();
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -48,11 +43,27 @@ export default function RootLayout() {
     return null;
   }
 
+  const ToastStyle = {
+    backgroundColor: colorScheme === 'dark' ? '#333' : '#fff',
+    borderRadius: 10,
+    padding: 10,
+    margin: 10,
+  };
+
+  const ToastTextStyle = {
+    color: colorScheme === 'dark' ? '#fff' : '#333',
+    fontSize: 14,
+  };
+
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        {/* TODO: Modify looks of the toast */}
-        <ToastManager position="bottom" animationStyle="rightInOut" />
+        <ToastManager
+          position="bottom"
+          animationStyle="rightInOut"
+          style={ToastStyle}
+          textStyle={ToastTextStyle}
+        />
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />

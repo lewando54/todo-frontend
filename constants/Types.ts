@@ -2,10 +2,14 @@ import { TodoStatus } from './Enums';
 
 export type Task = {
   id: number;
-  creationDate: Date;
+  createdAt: string;
   title: string;
   description: string;
-  status: TaskStatus;
+  status: TodoStatus;
+};
+
+export type TaskWithPending = Task & {
+  isPending: boolean;
 };
 
 export type TaskCreate = {
@@ -17,6 +21,11 @@ export type TaskUpdate = {
   title?: string;
   description?: string;
   status?: TaskStatus;
+};
+
+export type Option = {
+  value: string;
+  label: string;
 };
 
 export type TaskStatus = keyof typeof TodoStatus;
