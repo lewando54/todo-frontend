@@ -1,5 +1,10 @@
 module.exports = {
-  extends: ['expo', 'prettier', 'plugin:import/recommended'],
+  extends: [
+    'expo',
+    'prettier',
+    'plugin:import/recommended',
+    'plugin:@typescript-eslint/recommended',
+  ],
   plugins: ['prettier', 'react', 'react-native'],
   settings: {
     'import/resolver': {
@@ -26,6 +31,7 @@ module.exports = {
         ignore: ['^@/'],
       },
     ],
+    '@typescript-eslint/ban-types': 'off',
     'import/order': [
       'error',
       {

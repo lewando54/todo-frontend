@@ -21,7 +21,7 @@ export interface ITodoTaskItemProps {
   title: string;
   status: TaskStatus;
   onDelete: (id: number) => void;
-  onAction: (action: TaskStatus, id: number) => void;
+  onAction: (id: number, action: TaskStatus) => void;
 }
 
 export default function TodoTaskItem({
@@ -61,7 +61,7 @@ export default function TodoTaskItem({
           <ThemedIcon
             name="square-outline"
             size={16}
-            onPress={() => onAction(TodoStatus.ACTIVE, id)}
+            onPress={() => onAction(id, TodoStatus.ACTIVE)}
           />
         );
       case TodoStatus.TODO:
@@ -69,7 +69,7 @@ export default function TodoTaskItem({
           <ThemedIcon
             name="play"
             size={16}
-            onPress={() => onAction(TodoStatus.TODO, id)}
+            onPress={() => onAction(id, TodoStatus.TODO)}
           />
         );
       case TodoStatus.COMPLETED:
@@ -77,7 +77,7 @@ export default function TodoTaskItem({
           <ThemedIcon
             name="checkbox-outline"
             size={16}
-            onPress={() => onAction(TodoStatus.COMPLETED, id)}
+            onPress={() => onAction(id, TodoStatus.COMPLETED)}
           />
         );
       default:

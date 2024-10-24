@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import { useEffect } from 'react';
 
 import NetInfo from '@react-native-community/netinfo';
@@ -6,7 +7,11 @@ import {
   DefaultTheme,
   ThemeProvider,
 } from '@react-navigation/native';
-import { onlineManager } from '@tanstack/react-query';
+import {
+  onlineManager,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -24,6 +29,8 @@ onlineManager.setEventListener((setOnline) => {
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
+const queryClient = new QueryClient();
+
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
@@ -33,6 +40,7 @@ export default function RootLayout() {
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
+      console.log(process.env.API_URL);
     }
   }, [loaded]);
 
@@ -41,12 +49,14 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <ToastManager position="bottom" animationStyle="rightInOut" />
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <ToastManager position="bottom" animationStyle="rightInOut" />
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }

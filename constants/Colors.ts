@@ -7,7 +7,7 @@ const tintColorLight = '#0a7ea4';
 const tintColorDark = '#fff';
 
 export const Colors: { [key in Themes]: ColorVariants } & {
-  misc: { [key: string]: any };
+  misc: { [key: string]: string };
 } = {
   light: {
     text: '#11181C',

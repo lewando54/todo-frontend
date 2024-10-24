@@ -1,5 +1,5 @@
-import TodoPageTemplate from '@/components/templates/TodoPageTemplate';
+import TodoPage from '@/pages/TodoPage/TodoPage';
 
 export default function HomeScreen() {
-  return <TodoPageTemplate />;
+  return <TodoPage />;
 }
