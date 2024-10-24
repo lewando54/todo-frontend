@@ -3,20 +3,26 @@
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app) built for recruitment process of GMI.
 
 ## Get started
+1. Clone the repo
 
-1. Install dependencies
+   ```bash
+   git clone https://github.com/lewando54/todo-frontend
+   ```
+
+2. Install dependencies
 
    ```bash
    npm install
    ```
 
-2. Setup environment variable
+3. Setup environment variable
 
     ```.env
     EXPO_PUBLIC_API_URL=http://yoururlhere:3000
-    ```  
+    ```
+4. Prepare and start the backend found in the repo [todo-backend](https://github.com/lewando54/todo-backend)
 
-3. Start the app
+5. Start the app
 
    ```bash
     npx expo start
