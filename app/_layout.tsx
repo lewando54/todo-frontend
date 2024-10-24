@@ -51,6 +51,7 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        {/* TODO: Modify looks of the toast */}
         <ToastManager position="bottom" animationStyle="rightInOut" />
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

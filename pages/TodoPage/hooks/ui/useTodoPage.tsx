@@ -24,18 +24,20 @@ export const useTodoPage = () => {
     setTasks(() => tasksData);
   }, [tasksData]);
 
-  const onDelete = (id: number) => {
-    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
-    deleteTask(id);
-    Toast.success('Task deleted successfully');
-  };
-
   const statusFromAction = (action: TaskStatus) =>
     action === TodoStatus.TODO
       ? TodoStatus.ACTIVE
       : action === TodoStatus.ACTIVE
         ? TodoStatus.COMPLETED
         : TodoStatus.TODO;
+
+  // TODO: Add onSuccess and onError callbacks to the deleteTask and updateTask functions
+
+  const onDelete = (id: number) => {
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+    deleteTask(id);
+    Toast.success('Task deleted successfully');
+  };
 
   const onAction = (id: number, action: TaskStatus) => {
     setTasks((prevTasks) =>
