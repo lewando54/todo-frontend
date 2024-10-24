@@ -13,7 +13,7 @@ import { useThemeColor } from '@/hooks/useThemeColor';
 export interface ITaskEditPageTemplateProps {
   onSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
   taskStatusOptions: Option[];
-  isLoading?: boolean;
+  isLoading: boolean;
 }
 
 export default function TaskEditPageTemplate({
@@ -24,41 +24,46 @@ export default function TaskEditPageTemplate({
   const boxBg = useThemeColor({}, 'boxBg');
   const activityColor = useThemeColor({}, 'text');
 
+  if (isLoading) {
+    return (
+      <ThemedView style={styles.container}>
+        <ThemedView lightColor={boxBg} darkColor={boxBg} style={styles.box}>
+          <ActivityIndicator size="large" color={activityColor} />
+        </ThemedView>
+      </ThemedView>
+    );
+  }
+
   return (
     <ThemedView style={styles.container}>
       <ThemedView lightColor={boxBg} darkColor={boxBg} style={styles.box}>
-        {isLoading ? (
-          <ActivityIndicator size="large" color={activityColor} />
-        ) : (
-          <>
-            <TextFormInput
-              name="title"
-              title="Title"
-              placeholder="Title"
-              required
-            />
-            <TextFormInput
-              name="description"
-              title="Description"
-              placeholder="Description"
-              required
-            />
-            <SelectFormInput
-              name="status"
-              title="Status"
-              options={taskStatusOptions}
-            />
-            <IconButton
-              icon="pencil"
-              size={16}
-              onPress={() => onSubmit()}
-              variant="success"
-              style={styles.submitButton}
-            >
-              <ThemedText>Edit</ThemedText>
-            </IconButton>
-          </>
-        )}
+        <TextFormInput
+          name="title"
+          title="Title"
+          placeholder="Title"
+          required
+        />
+        <TextFormInput
+          name="description"
+          title="Description"
+          placeholder="Description"
+          required
+        />
+        <SelectFormInput
+          name="status"
+          title="Status"
+          options={taskStatusOptions}
+          required
+        />
+        <IconButton
+          icon="pencil"
+          size={16}
+          onPress={() => onSubmit()}
+          variant="success"
+          style={styles.submitButton}
+        >
+          <ThemedText>Edit</ThemedText>
+        </IconButton>
       </ThemedView>
     </ThemedView>
   );

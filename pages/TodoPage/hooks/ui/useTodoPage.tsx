@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { router } from 'expo-router';
 import { Toast } from 'toastify-react-native';
@@ -23,80 +23,108 @@ export const useTodoPage = () => {
 
   useEffect(() => {
     if (!tasksData) return;
-    setTasks(() => tasksData.map((task) => ({ ...task, isPending: false })));
+    setTasks(
+      tasksData
+        .map((task) => ({ ...task, isPending: false }))
+        .sort((a, b) => {
+          const statusOrder = {
+            [TodoStatus.TODO]: 1,
+            [TodoStatus.ACTIVE]: 2,
+            [TodoStatus.COMPLETED]: 3,
+          };
+          return statusOrder[a.status] - statusOrder[b.status];
+        }),
+    );
   }, [tasksData, isLoading]);
 
-  const statusFromAction = (action: TaskStatus) =>
-    action === TodoStatus.TODO
-      ? TodoStatus.ACTIVE
-      : action === TodoStatus.ACTIVE
-        ? TodoStatus.COMPLETED
-        : TodoStatus.TODO;
+  const statusFromAction = useCallback((action: TaskStatus) => {
+    const statusTransitions = {
+      [TodoStatus.TODO]: TodoStatus.ACTIVE,
+      [TodoStatus.ACTIVE]: TodoStatus.COMPLETED,
+      [TodoStatus.COMPLETED]: TodoStatus.TODO,
+    };
+    return statusTransitions[action];
+  }, []);
 
-  const onRefresh = () => {
-    refetch();
-  };
+  const onDelete = useCallback(
+    (id: number) => {
+      setTasks((prevTasks) => {
+        const taskIndex = prevTasks.findIndex((task) => task.id === id);
+        if (taskIndex === -1) return prevTasks;
 
-  const onAdd = () => {
-    router.navigate('/(tabs)/task/create');
-  };
+        const newTasks = [...prevTasks];
+        newTasks[taskIndex] = { ...newTasks[taskIndex], isPending: true };
+        return newTasks;
+      });
 
-  const onDetails = (id: number) => {
-    router.navigate(`/task/${id}`);
-  };
-
-  const onEdit = (id: number) => {
-    router.navigate(`/task/${id}/edit`);
-  };
-
-  const onDelete = (id: number) => {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === id ? { ...task, isPending: true } : task,
-      ),
-    );
-    deleteTask(id, {
-      onSuccess: () => {
-        Toast.success('Task deleted successfully');
-      },
-      onError: () => {
-        Toast.error('Failed to delete task');
-        setTasks((prevTasks) =>
-          prevTasks.map((task) =>
-            task.id === id ? { ...task, isPending: false } : task,
-          ),
-        );
-      },
-    });
-  };
-
-  const onAction = (id: number, action: TaskStatus) => {
-    updateTask(
-      {
-        id,
-        task: {
-          status: statusFromAction(action),
-        },
-      },
-      {
+      deleteTask(id, {
         onSuccess: () => {
+          Toast.success('Task deleted successfully');
+          setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
+        },
+        onError: () => {
+          Toast.error('Failed to delete task');
           setTasks((prevTasks) =>
             prevTasks.map((task) =>
-              task.id === id
-                ? {
-                    ...task,
-                    status: statusFromAction(action),
-                  }
-                : task,
+              task.id === id ? { ...task, isPending: false } : task,
             ),
           );
         },
-        onError: () => {
-          Toast.error('Failed to update task');
+      });
+    },
+    [deleteTask],
+  );
+
+  const onAction = useCallback(
+    (id: number, action: TaskStatus) => {
+      const newStatus = statusFromAction(action);
+
+      updateTask(
+        {
+          id,
+          task: { status: newStatus },
         },
-      },
-    );
-  };
+        {
+          onSuccess: () => {
+            setTasks((prevTasks) => {
+              const newTasks = prevTasks.map((task) =>
+                task.id === id ? { ...task, status: newStatus } : task,
+              );
+              return newTasks.sort((a, b) => {
+                const statusOrder = {
+                  [TodoStatus.TODO]: 1,
+                  [TodoStatus.ACTIVE]: 2,
+                  [TodoStatus.COMPLETED]: 3,
+                };
+                return statusOrder[a.status] - statusOrder[b.status];
+              });
+            });
+          },
+          onError: () => {
+            Toast.error('Failed to update task');
+          },
+        },
+      );
+    },
+    [updateTask, statusFromAction],
+  );
+
+  // Pozostałe funkcje pozostają bez zmian
+  const onRefresh = useCallback(() => {
+    refetch();
+  }, [refetch]);
+
+  const onAdd = useCallback(() => {
+    router.navigate('/(tabs)/task/create');
+  }, []);
+
+  const onDetails = useCallback((id: number) => {
+    router.navigate(`/task/${id}`);
+  }, []);
+
+  const onEdit = useCallback((id: number) => {
+    router.navigate(`/task/${id}/edit`);
+  }, []);
 
   return {
     tasks,

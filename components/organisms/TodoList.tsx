@@ -1,10 +1,9 @@
-import React, { useMemo } from 'react';
+import React, { useCallback } from 'react';
 
 import { Dimensions, StyleSheet } from 'react-native';
-import Animated, { LinearTransition } from 'react-native-reanimated';
+import Animated, { Easing, LinearTransition } from 'react-native-reanimated';
 
 import TodoTaskItem from '../molecules/TodoTaskItem';
-import { TodoStatus } from '@/constants/Enums';
 import { TaskStatus, TaskWithPending } from '@/constants/Types';
 
 export interface ITodoListProps {
@@ -26,42 +25,20 @@ export default function TodoList({
   onRefresh,
   isRefreshing,
 }: ITodoListProps) {
-  const tasksSortedByStatus = useMemo(
-    () =>
-      tasks.sort((a, b) => {
-        if (
-          (a.status === TodoStatus.TODO && b.status === TodoStatus.ACTIVE) ||
-          (a.status === TodoStatus.ACTIVE &&
-            b.status === TodoStatus.COMPLETED) ||
-          (a.status === TodoStatus.TODO && b.status === TodoStatus.COMPLETED)
-        ) {
-          return -1;
-        }
-        if (
-          (a.status === TodoStatus.ACTIVE && b.status === TodoStatus.TODO) ||
-          (a.status === TodoStatus.COMPLETED &&
-            b.status === TodoStatus.ACTIVE) ||
-          (a.status === TodoStatus.COMPLETED && b.status === TodoStatus.TODO)
-        ) {
-          return 1;
-        }
-        return 0;
-      }),
-
-    [tasks],
-  );
-
   return (
     <Animated.FlatList
-      data={tasksSortedByStatus}
+      data={tasks}
       style={styles.list}
-      itemLayoutAnimation={LinearTransition}
+      itemLayoutAnimation={LinearTransition.easing(Easing.linear)}
       onRefresh={onRefresh}
       refreshing={isRefreshing}
-      keyExtractor={(item) => item.id.toString()}
-      renderItem={({ item }) => (
+      keyExtractor={useCallback(
+        (item: TaskWithPending) => `task-${item.id}`,
+        [],
+      )}
+      renderItem={({ item }: { item: TaskWithPending }) => (
         <TodoTaskItem
-          key={item.id}
+          key={`task-${item.id}`}
           id={item.id}
           title={item.title}
           status={item.status}
@@ -72,6 +49,10 @@ export default function TodoList({
           isPending={item.isPending}
         />
       )}
+      removeClippedSubviews={false}
+      windowSize={5}
+      maxToRenderPerBatch={5}
+      initialNumToRender={10}
     />
   );
 }

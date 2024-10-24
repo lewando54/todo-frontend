@@ -24,12 +24,22 @@ export const useTaskEditPage = () => {
 
   const methods = useForm<EditTaskFormData>({
     defaultValues: {
-      title: taskData?.title || '',
-      description: taskData?.description || '',
-      status: taskData?.status || TodoStatus.TODO,
+      title: '',
+      description: '',
+      status: TodoStatus.TODO,
     },
     resolver: zodResolver(EditTaskSchema),
   });
+
+  useEffect(() => {
+    if (taskData?.title && taskData?.description && taskData?.status) {
+      methods.reset({
+        title: taskData.title,
+        description: taskData.description,
+        status: taskData.status,
+      });
+    }
+  }, [taskData, methods]);
 
   const statusKeys = Object.keys(TodoStatus);
 
@@ -61,5 +71,12 @@ export const useTaskEditPage = () => {
     });
   });
 
-  return { methods, taskStatusOptions, isUpdatePending, isLoading, onSubmit };
+  return {
+    methods,
+    taskStatusOptions,
+    isUpdatePending,
+    isLoading,
+    onSubmit,
+    taskData,
+  };
 };

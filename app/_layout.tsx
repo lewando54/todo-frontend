@@ -35,7 +35,6 @@ export default function RootLayout() {
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
-      console.log(process.env.API_URL);
     }
   }, [loaded]);
 

@@ -1,13 +1,16 @@
 import React from 'react';
 
-import { Picker } from '@react-native-picker/picker';
+import { Ionicons } from '@expo/vector-icons';
 import { Controller, useFormContext } from 'react-hook-form';
 import { StyleSheet, Text, View } from 'react-native';
+import SelectDropdown from 'react-native-select-dropdown';
 
 import { ThemedText } from './ThemedText';
+import { ThemedView } from './ThemedView';
 import { Colors } from '@/constants/Colors';
 import { Option } from '@/constants/Types';
 import { useThemeColor } from '@/hooks/useThemeColor';
+import { capitalize } from '@/utils/utils';
 
 export interface SelectFormInputProps {
   options: Option[];
@@ -32,6 +35,12 @@ export default function SelectFormInput({
   const textColor = useThemeColor({}, 'text');
   const textInputBg = useThemeColor({}, 'background');
   const dangerColor = useThemeColor({}, 'dangerBg');
+  const selectedColor = useThemeColor({}, 'tint');
+
+  const dropdownStyles = {
+    borderColor: Colors.misc.gray,
+    backgroundColor: textInputBg,
+  };
 
   return (
     <View style={styles.container}>
@@ -45,26 +54,44 @@ export default function SelectFormInput({
         control={control}
         name={name}
         render={({ field: { onChange, value } }) => (
-          <Picker
-            style={[
-              styles.textInput,
-              {
-                borderColor: Colors.misc.gray,
-                color: textColor,
-                backgroundColor: textInputBg,
-              },
-            ]}
-            onValueChange={onChange}
-            selectedValue={value}
-          >
-            {options.map((option) => (
-              <Picker.Item
-                key={option.value}
-                label={option.label}
-                value={option.value}
-              />
-            ))}
-          </Picker>
+          <SelectDropdown
+            data={options}
+            dropdownStyle={dropdownStyles}
+            onSelect={(selectedItem) => {
+              onChange(selectedItem.value);
+            }}
+            renderItem={(item) => (
+              <ThemedView
+                style={[
+                  styles.dropdownItem,
+                  {
+                    backgroundColor:
+                      value === item?.value ? selectedColor : textInputBg,
+                  },
+                ]}
+              >
+                <ThemedText>{item?.label}</ThemedText>
+              </ThemedView>
+            )}
+            renderButton={(selectedItem, isOpened) => (
+              <ThemedView
+                style={[
+                  styles.dropdownButton,
+                  {
+                    backgroundColor: textInputBg,
+                    borderColor: Colors.misc.gray,
+                  },
+                ]}
+              >
+                <ThemedText>{capitalize(value) || placeholder}</ThemedText>
+                <Ionicons
+                  name={isOpened ? 'chevron-up' : 'chevron-down'}
+                  size={16}
+                  color={textColor}
+                />
+              </ThemedView>
+            )}
+          />
         )}
       />
       {errors[name] && (
@@ -80,14 +107,21 @@ const styles = StyleSheet.create({
   container: {
     gap: 10,
   },
-  textInput: {
+  errorText: {
+    fontSize: 14,
+    marginTop: -5,
+  },
+  dropdownButton: {
     height: 40,
     borderRadius: 8,
     paddingHorizontal: 10,
     borderWidth: 1,
+    fontSize: 16,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
-  errorText: {
-    fontSize: 14,
-    marginTop: -5,
+  dropdownItem: {
+    padding: 10,
   },
 });

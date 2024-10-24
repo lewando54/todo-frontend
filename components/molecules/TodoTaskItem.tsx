@@ -48,7 +48,7 @@ export default function TodoTaskItem({
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
-      width: `${interpolate(animatedWidth.value, [0, 1], [0, 100])}%`,
+      width: `${interpolate(animatedWidth.value, [0, 1], [0, 95])}%`,
     };
   });
 

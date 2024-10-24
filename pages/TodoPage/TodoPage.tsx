@@ -14,7 +14,6 @@ export default function TodoPage() {
     onAction,
     onRefresh,
   } = useTodoPage();
-  console.log('tasks', tasks);
   return (
     <TodoPageTemplate
       tasks={tasks}
